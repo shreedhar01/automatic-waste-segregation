@@ -6,6 +6,6 @@ app.get('/', (_:Request, res:Response) => {
     res.json({message:"Hello world"})
 })
 
-app.listen(8000,() => {
-    console.log("Hello world");
+app.listen(process.env.PORT || 8002,() => {
+    console.log("Hello world :: ", process.env.PORT);
 })
