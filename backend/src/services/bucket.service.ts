@@ -11,3 +11,7 @@ export const postLengthService = async (name: Buckets, length: number) => {
     if(isUpdated?.rowCount === 0) return false
     return true
 }
+
+export const getStatusOfBucketService = async () => {
+    return await db.select().from(bucketTable);  
+}
