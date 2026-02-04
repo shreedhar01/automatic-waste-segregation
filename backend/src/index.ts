@@ -1,7 +1,9 @@
 import express, { type Request, type Response } from "express"
 import bucketRouter from "./api-v1/routes/bucket.route.js"
+import cors from "cors"
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 
 app.get('/', (_:Request, res:Response) => {
