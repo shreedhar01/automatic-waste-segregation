@@ -36,9 +36,6 @@ importers:
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.8
-      tsc:
-        specifier: ^2.0.4
-        version: 2.0.4
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -965,10 +962,6 @@ packages:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
 
-  tsc@2.0.4:
-    resolution: {integrity: sha512-fzoSieZI5KKJVBYGvwbVZs/J5za84f2lSTLPYf6AGiIf43tZ3GNrI1QzTLcjtyDDP4aLxd46RTZq1nQxe7+k5Q==}
-    hasBin: true
-
   tsx@4.21.0:
     resolution: {integrity: sha512-5C1sg4USs1lfG0GFb2RLXsdpXqBSEhAaA/0kPL01wxzpMqLILNxIxIOKiILz+cdg/pLnOUxFYOR5yhHU666wbw==}
     engines: {node: '>=18.0.0'}
@@ -1287,7 +1280,7 @@ snapshots:
 
   '@types/pg@8.16.0':
     dependencies:
-      '@types/node': 25.2.0
+      '@types/node': 22.19.8
       pg-protocol: 1.11.0
       pg-types: 2.2.0
 
@@ -1736,8 +1729,6 @@ snapshots:
   statuses@2.0.2: {}
 
   toidentifier@1.0.1: {}
-
-  tsc@2.0.4: {}
 
   tsx@4.21.0:
     dependencies:
