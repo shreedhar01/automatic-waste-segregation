@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useGetBucketInfo } from "@/lib/api/hooks/bucket";
 import toast from "react-hot-toast";
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 
 // Type definition for bucket
 interface Bucket {
@@ -120,149 +121,152 @@ export default function Home() {
   const okBins = buckets.filter((b: Bucket) => calculateFullness(b.length) < 50);
 
   return (
-    <div className="flex flex-col w-full min-h-screen items-center p-4 sm:p-8 bg-linear-to-br from-blue-50 to-green-50">
-      <div className="w-full max-w-7xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">
-            Automatic Waste Segregation System
-          </h1>
-          <p className="text-lg text-gray-600">
-            Real-time monitoring of waste bins
-          </p>
-        </div>
+    <>
+      <PWAInstallPrompt/>
+      <div className="flex flex-col w-full min-h-screen items-center p-4 sm:p-8 bg-linear-to-br from-blue-50 to-green-50">
+        <div className="w-full max-w-7xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-2">
+              Automatic Waste Segregation System
+            </h1>
+            <p className="text-lg text-gray-600">
+              Real-time monitoring of waste bins
+            </p>
+          </div>
 
-        {/* Alert Banner for Critical Bins */}
-        {criticalBins.length > 0 && (
-          <div className="mb-6 bg-red-100 border-l-4 border-red-500 p-4 rounded-lg shadow-md">
-            <div className="flex items-center">
-              <span className="text-3xl mr-3">🚨</span>
-              <div>
-                <p className="font-bold text-red-800">Urgent Action Required!</p>
-                <p className="text-red-700">
-                  {criticalBins.length} bin{criticalBins.length > 1 ? 's' : ''} {criticalBins.length > 1 ? 'are' : 'is'} critically full: {criticalBins.map(b => b.name).join(', ')}
-                </p>
+          {/* Alert Banner for Critical Bins */}
+          {criticalBins.length > 0 && (
+            <div className="mb-6 bg-red-100 border-l-4 border-red-500 p-4 rounded-lg shadow-md">
+              <div className="flex items-center">
+                <span className="text-3xl mr-3">🚨</span>
+                <div>
+                  <p className="font-bold text-red-800">Urgent Action Required!</p>
+                  <p className="text-red-700">
+                    {criticalBins.length} bin{criticalBins.length > 1 ? 's' : ''} {criticalBins.length > 1 ? 'are' : 'is'} critically full: {criticalBins.map(b => b.name).join(', ')}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Bins Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
-          {buckets.map((bucket: Bucket) => {
-            const fullness = calculateFullness(bucket.length);
-            const color = getFullnessColor(fullness);
-            const status = getStatus(fullness);
-            const textColor = getTextColor(fullness);
-            const icon = getWasteIcon(bucket.name);
+          {/* Bins Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+            {buckets.map((bucket: Bucket) => {
+              const fullness = calculateFullness(bucket.length);
+              const color = getFullnessColor(fullness);
+              const status = getStatus(fullness);
+              const textColor = getTextColor(fullness);
+              const icon = getWasteIcon(bucket.name);
 
-            return (
-              <div
-                key={bucket.id}
-                className={`bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center transition-all duration-300 transform ${fullness >= 80 ? 'ring-2 ring-red-500 animate-pulse' : ''
-                  }`}
-              >
-                {/* Icon and Name */}
-                <div className="text-4xl mb-2">{icon}</div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">{bucket.name}</h3>
+              return (
+                <div
+                  key={bucket.id}
+                  className={`bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center transition-all duration-300 transform ${fullness >= 80 ? 'ring-2 ring-red-500 animate-pulse' : ''
+                    }`}
+                >
+                  {/* Icon and Name */}
+                  <div className="text-4xl mb-2">{icon}</div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">{bucket.name}</h3>
 
-                {/* Bin Visualization */}
-                <div className="relative w-32 h-48 border-4 border-gray-800 rounded-b-xl mb-4 bg-linear-to-b from-gray-50 to-gray-100 overflow-hidden shadow-inner">
-                  {/* Fill Level */}
-                  <div
-                    className={`absolute bottom-0 w-full transition-all duration-700 ease-out ${color}`}
-                    style={{ height: `${fullness}%` }}
-                  >
-                    <div className="absolute inset-0 bg-linear-to-t from-black/10 to-transparent"></div>
+                  {/* Bin Visualization */}
+                  <div className="relative w-32 h-48 border-4 border-gray-800 rounded-b-xl mb-4 bg-linear-to-b from-gray-50 to-gray-100 overflow-hidden shadow-inner">
+                    {/* Fill Level */}
+                    <div
+                      className={`absolute bottom-0 w-full transition-all duration-700 ease-out ${color}`}
+                      style={{ height: `${fullness}%` }}
+                    >
+                      <div className="absolute inset-0 bg-linear-to-t from-black/10 to-transparent"></div>
+                    </div>
+
+                    {/* Percentage Display */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className={`text-3xl font-bold ${textColor} drop-shadow-lg`}>
+                        {fullness.toFixed(0)}%
+                      </div>
+                    </div>
+
+                    {/* Warning Icon for Critical Bins */}
+                    {fullness >= 80 && (
+                      <div className="absolute top-2 right-2 text-2xl animate-bounce">
+                        ⚠️
+                      </div>
+                    )}
                   </div>
 
-                  {/* Percentage Display */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className={`text-3xl font-bold ${textColor} drop-shadow-lg`}>
-                      {fullness.toFixed(0)}%
-                    </div>
-                  </div>
-
-                  {/* Warning Icon for Critical Bins */}
-                  {fullness >= 80 && (
-                    <div className="absolute top-2 right-2 text-2xl animate-bounce">
-                      ⚠️
-                    </div>
-                  )}
-                </div>
-
-                {/* Status Info */}
-                <div className="text-center space-y-2 w-full">
-                  <div className={`text-sm font-semibold px-3 py-1 rounded-full ${fullness >= 80 ? 'bg-red-100 text-red-800' :
+                  {/* Status Info */}
+                  <div className="text-center space-y-2 w-full">
+                    <div className={`text-sm font-semibold px-3 py-1 rounded-full ${fullness >= 80 ? 'bg-red-100 text-red-800' :
                       fullness >= 60 ? 'bg-orange-100 text-orange-800' :
                         fullness >= 40 ? 'bg-yellow-100 text-yellow-800' :
                           'bg-green-100 text-green-800'
-                    }`}>
-                    {status}
+                      }`}>
+                      {status}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        {/* Summary Dashboard */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <span>📊</span> System Overview
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center p-4 bg-green-50 rounded-xl border-2 border-green-200">
-              <div className="text-4xl font-bold text-green-600 mb-1">
-                {okBins.length}
+          {/* Summary Dashboard */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <span>📊</span> System Overview
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center p-4 bg-green-50 rounded-xl border-2 border-green-200">
+                <div className="text-4xl font-bold text-green-600 mb-1">
+                  {okBins.length}
+                </div>
+                <p className="text-sm font-medium text-green-700">Bins OK</p>
+                <p className="text-xs text-green-600 mt-1">&lt; 50% full</p>
               </div>
-              <p className="text-sm font-medium text-green-700">Bins OK</p>
-              <p className="text-xs text-green-600 mt-1">&lt; 50% full</p>
-            </div>
 
-            <div className="text-center p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200">
-              <div className="text-4xl font-bold text-yellow-600 mb-1">
-                {warningBins.length}
+              <div className="text-center p-4 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+                <div className="text-4xl font-bold text-yellow-600 mb-1">
+                  {warningBins.length}
+                </div>
+                <p className="text-sm font-medium text-yellow-700">Bins Warning</p>
+                <p className="text-xs text-yellow-600 mt-1">50-80% full</p>
               </div>
-              <p className="text-sm font-medium text-yellow-700">Bins Warning</p>
-              <p className="text-xs text-yellow-600 mt-1">50-80% full</p>
-            </div>
 
-            <div className="text-center p-4 bg-red-50 rounded-xl border-2 border-red-200">
-              <div className="text-4xl font-bold text-red-600 mb-1">
-                {criticalBins.length}
+              <div className="text-center p-4 bg-red-50 rounded-xl border-2 border-red-200">
+                <div className="text-4xl font-bold text-red-600 mb-1">
+                  {criticalBins.length}
+                </div>
+                <p className="text-sm font-medium text-red-700">Bins Critical</p>
+                <p className="text-xs text-red-600 mt-1">&gt; 80% full</p>
               </div>
-              <p className="text-sm font-medium text-red-700">Bins Critical</p>
-              <p className="text-xs text-red-600 mt-1">&gt; 80% full</p>
-            </div>
 
-            <div className="text-center p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
-              <div className="text-4xl font-bold text-blue-600 mb-1">
-                {buckets.length}
+              <div className="text-center p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+                <div className="text-4xl font-bold text-blue-600 mb-1">
+                  {buckets.length}
+                </div>
+                <p className="text-sm font-medium text-blue-700">Total Bins</p>
+                <p className="text-xs text-blue-600 mt-1">Active monitoring</p>
               </div>
-              <p className="text-sm font-medium text-blue-700">Total Bins</p>
-              <p className="text-xs text-blue-600 mt-1">Active monitoring</p>
             </div>
           </div>
-        </div>
 
-        {/* Overall System Status */}
-        <div className={`text-center p-4 rounded-xl ${criticalBins.length > 0 ? 'bg-red-100 border-2 border-red-300' :
+          {/* Overall System Status */}
+          <div className={`text-center p-4 rounded-xl ${criticalBins.length > 0 ? 'bg-red-100 border-2 border-red-300' :
             warningBins.length > 0 ? 'bg-yellow-100 border-2 border-yellow-300' :
               'bg-green-100 border-2 border-green-300'
-          }`}>
-          <p className={`font-semibold ${criticalBins.length > 0 ? 'text-red-800' :
+            }`}>
+            <p className={`font-semibold ${criticalBins.length > 0 ? 'text-red-800' :
               warningBins.length > 0 ? 'text-yellow-800' :
                 'text-green-800'
-            }`}>
-            System Status: {
-              criticalBins.length > 0 ? '🔴 Critical - Immediate Action Required' :
-                warningBins.length > 0 ? '🟡 Warning - Monitor Closely' :
-                  '🟢 All Systems Normal'
-            }
-          </p>
+              }`}>
+              System Status: {
+                criticalBins.length > 0 ? '🔴 Critical - Immediate Action Required' :
+                  warningBins.length > 0 ? '🟡 Warning - Monitor Closely' :
+                    '🟢 All Systems Normal'
+              }
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,0 +1,24 @@
+{
+    "name": "Automatic Waste Segregation System",
+    "short_name": "Waste Monitor",
+    "description": "Real-time monitoring of waste bins",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#3b82f6",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icon-192x192.jpg",
+            "sizes": "192x192",
+            "type": "image/jpg",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512x512.jpg",
+            "sizes": "512x512",
+            "type": "image/jpg",
+            "purpose": "any maskable"
+        }
+    ]
+}
